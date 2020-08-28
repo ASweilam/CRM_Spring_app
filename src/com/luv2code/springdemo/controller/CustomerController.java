@@ -1,14 +1,11 @@
 package com.luv2code.springdemo.controller;
 
-import com.luv2code.springdemo.dao.CustomerDAO;
 import com.luv2code.springdemo.entity.Customer;
 import com.luv2code.springdemo.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -41,6 +38,36 @@ public class CustomerController {
 
         return "customer-form";
     }
+
+    @PostMapping("/saveCustomer")
+    private String saveCustomer(@ModelAttribute("customer") Customer customer ){
+
+        customerService.saveCustomer(customer);
+
+        return "redirect:/customer/list";
+    }
+
+    @GetMapping("/showFormForUpdate")
+    private String showFormForUpdate(@RequestParam("customerId") int theId, Model theModel){
+        Customer theCustomer = customerService.getCustomer(theId);
+
+        theModel.addAttribute("customer",theCustomer);
+
+        return "customer-form";
+    }
+
+
+
+    @GetMapping("/delete")
+    private String deleteCustomer(@RequestParam("customerId") int theId){
+
+        customerService.deleteCustomer(theId);
+
+        return "redirect:/customer/list";
+    }
+
+
+
 
 
 }
